@@ -170,23 +170,38 @@ function updateProgress() {
   }
 }
 
-// Theme management
+// Theme management with enhanced animation
 function setTheme(theme) {
+  // Add transition class for animation
+  document.body.classList.add("theme-transition");
+  
   // Remove all theme classes
   document.body.classList.remove("dark-theme", "light-theme");
   
-  // Add the selected theme class
-  document.body.classList.add(`${theme}-theme`);
+  // Add the selected theme class after a short delay to allow for animation
+  setTimeout(() => {
+    document.body.classList.add(`${theme}-theme`);
+    
+    // Remove transition class after animation completes
+    setTimeout(() => {
+      document.body.classList.remove("theme-transition");
+    }, 600);
+  }, 10);
   
   currentTheme = theme;
   localStorage.setItem("sleepGuiderTheme", theme);
   
-  // Update theme icon
-  if (theme === "dark") {
-    themeIcon.textContent = "🌙";
-  } else {
-    themeIcon.textContent = "☀️";
-  }
+  // Update theme icon with smooth transition
+  themeIcon.style.opacity = "0";
+  
+  setTimeout(() => {
+    if (theme === "dark") {
+      themeIcon.textContent = "🌙";
+    } else {
+      themeIcon.textContent = "☀️";
+    }
+    themeIcon.style.opacity = "1";
+  }, 300);
 }
 
 // Initialize theme from localStorage
@@ -209,6 +224,14 @@ setTimeBtn.addEventListener("click", () => {
 });
 
 themeToggleBtn.addEventListener("click", () => {
+  // Add pulse animation to button
+  themeToggleBtn.classList.add("pulse");
+  
+  // Remove pulse class after animation completes
+  setTimeout(() => {
+    themeToggleBtn.classList.remove("pulse");
+  }, 600);
+  
   if (currentTheme === "dark") {
     setTheme("light");
   } else {
